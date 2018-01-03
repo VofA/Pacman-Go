@@ -1,7 +1,7 @@
 sudo: false
 addons:
   apt_packages:
-    - libxcursor-dev
+    - libx11-dev
 language: go
 go:
   - 1.9
