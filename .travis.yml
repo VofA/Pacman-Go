@@ -5,7 +5,6 @@ addons:
 language: go
 go:
   - 1.9
-  - master
 matrix:
   allow_failures:
     - go: master
@@ -13,7 +12,4 @@ matrix:
 install:
   - go get -d -t ./...
 script:
-  - # go get -t -v ./...
-  - # diff -u <(echo -n) <(gofmt -d -s .)
-  - # go tool vet .
   - go build -o Build/Build.exe Source/main.go
