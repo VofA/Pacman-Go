@@ -3,6 +3,7 @@ addons:
   apt_packages:
     - libxcursor-dev
     - libx11-dev
+    - libxrandr-dev
 language: go
 go:
   - 1.9
