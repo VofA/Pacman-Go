@@ -4,6 +4,7 @@ addons:
     - libxcursor-dev
     - libx11-dev
     - libxrandr-dev
+    - libxinerama-dev
 language: go
 go:
   - 1.9
