@@ -1,3 +1,4 @@
   language: go
   go:
     - 1.9
+  script: go build -o Build/Build.exe Source/main.go
