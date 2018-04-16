@@ -1,45 +1,46 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"image"
+	"image/draw"
+	_ "image/png"
 	"log"
 	"os"
 	"runtime"
 	"strings"
-	"bufio"
+
 	"github.com/go-gl/gl/v4.5-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
-	"image"
-	"image/draw"
-	_ "image/png"
 )
 
 const (
-	width = 500
+	width  = 500
 	height = 500
 
-	rows = 20
+	rows    = 20
 	columns = 20
 )
 
 var (
-	square = []float32 {
+	square = []float32{
 		// X,    Y,    Z,    U,    V
-		-0.5,  0.5,  0.0,  0.0,  1.0, // 1
-		-0.5, -0.5,  0.0,  0.0,  0.0, // 2
-		0.5, -0.5,  0.0,  1.0,  0.0, // 3
+		-0.5, 0.5, 0.0, 0.0, 1.0, // 1
+		-0.5, -0.5, 0.0, 0.0, 0.0, // 2
+		0.5, -0.5, 0.0, 1.0, 0.0, // 3
 
-		-0.5,  0.5,  0.0,  0.0,  1.0, // 4
-		0.5,  0.5,  0.0,  1.0,  1.0, // 5
-		0.5, -0.5,  0.0,  1.0,  0.0, // 6
+		-0.5, 0.5, 0.0, 0.0, 1.0, // 4
+		0.5, 0.5, 0.0, 1.0, 1.0, // 5
+		0.5, -0.5, 0.0, 1.0, 0.0, // 6
 	}
 
 	program uint32
 )
 
 type cell struct {
-	x int
-	y int
+	x        int
+	y        int
 	drawable uint32
 }
 
@@ -85,43 +86,8 @@ func drawCells(cells [][]*cell, window *glfw.Window, program, texture uint32) {
 }
 
 func drawTree(cells [][]*cell) {
-	cells[9][3].draw()
-	cells[9][4].draw()
-
-	for i := 3; i < 16; i++ {
-		cells[i][5].draw()
-		cells[i][6].draw()
-	}
-
-	for i := 4; i < 15; i++ {
-		cells[i][7].draw()
-		cells[i][8].draw()
-	}
-
-	for i := 5; i < 14; i++ {
-		cells[i][9].draw()
-		cells[i][10].draw()
-	}
-
-	for i := 6; i < 13; i++ {
-		cells[i][11].draw()
-		cells[i][12].draw()
-	}
-
-	for i := 7; i < 12; i++ {
-		cells[i][13].draw()
-		cells[i][14].draw()
-	}
-
-	for i := 8; i < 11; i++ {
-		cells[i][15].draw()
-		cells[i][16].draw()
-	}
-
-	for i := 9; i < 10; i++ {
-		cells[i][17].draw()
-		cells[i][18].draw()
-	}
+	cells[0][0].draw()
+	cells[18][18].draw()
 }
 
 func makeCells() [][]*cell {
@@ -129,7 +95,7 @@ func makeCells() [][]*cell {
 
 	for x := 0; x < rows; x++ {
 		for y := 0; y < columns; y++ {
-			c := newCell(x, y)
+			c := newCell(x, 19-y)
 			cells[x] = append(cells[x], c)
 		}
 	}
@@ -147,7 +113,7 @@ func newCell(x, y int) *cell {
 		var size float32
 
 		stride++
-		if stride == 6  {
+		if stride == 6 {
 			stride = 1
 		}
 
@@ -170,8 +136,8 @@ func newCell(x, y int) *cell {
 	}
 
 	return &cell{
-		x: x,
-		y: y,
+		x:        x,
+		y:        y,
 		drawable: makeVao(points),
 	}
 }
@@ -213,7 +179,7 @@ func initGlfw() *glfw.Window {
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 
-	window, err := glfw.CreateWindow(width, height, "Title", nil, nil)
+	window, err := glfw.CreateWindow(width, height, "Pacman", nil, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -277,10 +243,10 @@ func makeVao(points []float32) uint32 {
 	gl.BindVertexArray(vao)
 	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
 
-	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 4 * 5, gl.PtrOffset(0))
+	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 4*5, gl.PtrOffset(0))
 	gl.EnableVertexAttribArray(0)
 
-	gl.VertexAttribPointer(1, 2, gl.FLOAT, false, 4 * 5, gl.PtrOffset(4 * 3))
+	gl.VertexAttribPointer(1, 2, gl.FLOAT, false, 4*5, gl.PtrOffset(4*3))
 	gl.EnableVertexAttribArray(1)
 
 	return vao
